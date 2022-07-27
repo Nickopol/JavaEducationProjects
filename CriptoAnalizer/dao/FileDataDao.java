@@ -25,7 +25,7 @@ public class FileDataDao implements DataDao {
     @Override
     public void writeData(String dataName, String data) {
         try {
-            Files.write(Path.of(dataName), data.getBytes());
+            Files.write(Path.of(dataName + ".txt"), data.getBytes());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }

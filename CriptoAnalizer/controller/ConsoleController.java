@@ -6,6 +6,7 @@ import CriptoAnalizer.service.CaesarCryptor;
 import CriptoAnalizer.service.Cryptor;
 import CriptoAnalizer.service.Logger;
 
+import java.time.Instant;
 import java.util.Scanner;
 
 public class ConsoleController {
@@ -17,7 +18,7 @@ public class ConsoleController {
     private final Cryptor cryptor = new CaesarCryptor();
     private final Logger log = Logger.getInstance();
 
-    public void printMainManu () {
+    public void callMainManu () {
         printHeader();
         makeChoise();
     }
@@ -35,14 +36,28 @@ public class ConsoleController {
     private void callChoise(int choise) {
         switch (choise) {
             case 1:
-                log.info("Choise 1");
+                enryptData();
                 break;
             case 2:
-                System.out.println("Choise 2");
+                log.info("Choise 2");
                 break;
             default:
                 System.out.println("\033[0;31m" + "Make correct choise: " + "\033[0m");
         }
+    }
+
+    private void enryptData() {
+        String path = getPathToFile();
+        String originalText = dataDao.getData(path);
+        String encryptedText = cryptor.encript(originalText);
+        String fileName = Instant.now().toString() + "-encrypted";
+        dataDao.writeData(fileName, encryptedText);
+    }
+
+    private String getPathToFile() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Insert path to file: ");
+        return scan.nextLine();
     }
 
     private boolean isExitCodeChoose(int choise) {

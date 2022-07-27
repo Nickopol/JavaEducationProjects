@@ -37,7 +37,7 @@ public class Analizer {
 
          */
         ConsoleController cc = new ConsoleController();
-        cc.printMainManu();
+        cc.callMainManu();
     }
 
     private static char[] openingFileArray () {
