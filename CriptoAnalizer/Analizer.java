@@ -1,5 +1,6 @@
 package CriptoAnalizer;
 
+import CriptoAnalizer.controller.ConsoleController;
 import CriptoAnalizer.dao.DataDao;
 import CriptoAnalizer.dao.FileDataDao;
 
@@ -27,9 +28,16 @@ public class Analizer {
     public static void main(String[] args) {
         //pushSaving(encryption(openingFileArray()));
         //dencrypting();
-
+        /*
+        String dataName = "info.txt";
         DataDao dao = new FileDataDao();
-        dao.writeData("info.txt", "Hello word");
+        dao.writeData(dataName, "Hello word");
+
+        System.out.println(dao.getData(dataName));
+
+         */
+        ConsoleController cc = new ConsoleController();
+        cc.printMainManu();
     }
 
     private static char[] openingFileArray () {
