@@ -8,6 +8,7 @@ public class CaesarCryptor implements Cryptor{
 
     @Override
     public String dencript(String data) {
+
         return "dencripted text";
     }
 }

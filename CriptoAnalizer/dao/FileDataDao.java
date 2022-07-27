@@ -1,6 +1,7 @@
 package CriptoAnalizer.dao;
 
 import CriptoAnalizer.dao.DataDao;
+import CriptoAnalizer.service.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +9,7 @@ import java.nio.file.Path;
 
 public class FileDataDao implements DataDao {
 
+    private Logger logger = Logger.getInstance();
     @Override
     public String getData(String dataName) {
         byte[] dataBytes = new byte[0];
@@ -15,7 +17,7 @@ public class FileDataDao implements DataDao {
         try {
             dataBytes = Files.readAllBytes(Path.of(dataName));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error(e.getMessage());
         }
         return new String(dataBytes);
     }
@@ -25,7 +27,7 @@ public class FileDataDao implements DataDao {
         try {
             Files.write(Path.of(dataName), data.getBytes());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error(e.getMessage());
         }
     }
 }
