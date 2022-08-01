@@ -39,7 +39,7 @@ public class ConsoleController {
                 enryptData();
                 break;
             case 2:
-                log.info("Choise 2");
+                decriptData();
                 break;
             default:
                 System.out.println("\033[0;31m" + "Make correct choise: " + "\033[0m");
@@ -48,12 +48,27 @@ public class ConsoleController {
 
     private void enryptData() {
         String path = getPathToFile();
+        int secretKey = getSecretKey();
         String originalText = dataDao.getData(path);
-        String encryptedText = cryptor.encript(originalText);
+        String encryptedText = cryptor.encript(originalText, secretKey);
         String fileName = Instant.now().toString() + "-encrypted";
         dataDao.writeData(fileName, encryptedText);
     }
 
+    private void decriptData() {
+        String path = getPathToFile();
+        int secretKey = getSecretKey();
+        String originalText = dataDao.getData(path);
+        String encryptedText = cryptor.decript(originalText, secretKey);
+        String fileName = Instant.now().toString() + "-encrypted";
+        dataDao.writeData(fileName, encryptedText);
+    }
+    private int getSecretKey() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Insert key to encript: ");
+        return scan.nextInt();
+
+    }
     private String getPathToFile() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Insert path to file: ");

@@ -2,13 +2,22 @@ package CriptoAnalizer.service;
 
 public class CaesarCryptor implements Cryptor{
     @Override
-    public String encript(String data) {
-        return "encripted text";
+    public String encript(String data, int key) {
+        return cryptation(data, key);
     }
 
     @Override
-    public String dencript(String data) {
+    public String decript(String data, int key) {
+        int newKey = - key;
+        return cryptation(data, newKey);
+    }
 
-        return "dencripted text";
+    private String cryptation (String text, int key) {
+        char[] textInChars = text.toCharArray();
+        char[] cryptedText = new char[textInChars.length];
+        for(int i = 0; i < textInChars.length; i++) {
+            cryptedText[i] = (char)(((int)textInChars[i]) + key);
+        }
+        return cryptedText.toString();
     }
 }

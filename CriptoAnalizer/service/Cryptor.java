@@ -2,8 +2,8 @@ package CriptoAnalizer.service;
 
 public interface Cryptor {
 
-    String encript (String data);
+    String encript (String data, int key);
 
-    String dencript (String data);
+    String decript (String data, int key);
 
 }
