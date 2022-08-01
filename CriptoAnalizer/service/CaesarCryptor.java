@@ -16,8 +16,9 @@ public class CaesarCryptor implements Cryptor{
         char[] textInChars = text.toCharArray();
         char[] cryptedText = new char[textInChars.length];
         for(int i = 0; i < textInChars.length; i++) {
-            cryptedText[i] = (char)(((int)textInChars[i]) + key);
+            int midl = (int)textInChars[i] + key;
+            cryptedText[i] = (char)midl;
         }
-        return cryptedText.toString();
+        return new String(cryptedText);
     }
 }

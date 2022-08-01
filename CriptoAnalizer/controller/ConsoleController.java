@@ -7,6 +7,7 @@ import CriptoAnalizer.service.Cryptor;
 import CriptoAnalizer.service.Logger;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class ConsoleController {
@@ -17,6 +18,8 @@ public class ConsoleController {
     private final DataDao dataDao = new FileDataDao();
     private final Cryptor cryptor = new CaesarCryptor();
     private final Logger log = Logger.getInstance();
+
+    private boolean programEnd = false;
 
     public void callMainManu () {
         printHeader();
@@ -30,6 +33,7 @@ public class ConsoleController {
             int choise = scanner.nextInt();
             if (isExitCodeChoose(choise)) break;
             callChoise(choise);
+            if (programEnd) break;
         } while (true);
     }
 
@@ -51,8 +55,12 @@ public class ConsoleController {
         int secretKey = getSecretKey();
         String originalText = dataDao.getData(path);
         String encryptedText = cryptor.encript(originalText, secretKey);
-        String fileName = Instant.now().toString() + "-encrypted";
+        String fileName = Instant.now()
+                .truncatedTo(ChronoUnit.MILLIS)
+                .toString().replaceAll("[TZ]", " ") + "- encrypted";
         dataDao.writeData(fileName, encryptedText);
+        System.out.println("File was encrypted and save!");
+        programEnd = true;
     }
 
     private void decriptData() {
@@ -60,8 +68,11 @@ public class ConsoleController {
         int secretKey = getSecretKey();
         String originalText = dataDao.getData(path);
         String encryptedText = cryptor.decript(originalText, secretKey);
-        String fileName = Instant.now().toString() + "-encrypted";
+        String fileName = Instant.now().truncatedTo(ChronoUnit.MILLIS)
+                .toString().replaceAll("[TZ]", " ") + "- decrypted";
         dataDao.writeData(fileName, encryptedText);
+        System.out.println("File was decrypted and saved!");
+        programEnd = true;
     }
     private int getSecretKey() {
         Scanner scan = new Scanner(System.in);
