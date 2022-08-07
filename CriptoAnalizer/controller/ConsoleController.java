@@ -4,7 +4,7 @@ import CriptoAnalizer.dao.DataDao;
 import CriptoAnalizer.dao.FileDataDao;
 import CriptoAnalizer.service.CaesarCryptor;
 import CriptoAnalizer.service.Cryptor;
-import CriptoAnalizer.service.Logger;
+//import CriptoAnalizer.service.Logger;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -17,7 +17,7 @@ public class ConsoleController {
 
     private final DataDao dataDao = new FileDataDao();
     private final Cryptor cryptor = new CaesarCryptor();
-    private final Logger log = Logger.getInstance();
+    //private final Logger log = Logger.getInstance();
 
     private boolean programEnd = false;
 
@@ -39,14 +39,10 @@ public class ConsoleController {
 
     private void callChoise(int choise) {
         switch (choise) {
-            case 1:
-                enryptData();
-                break;
-            case 2:
-                decriptData();
-                break;
-            default:
-                System.out.println("\033[0;31m" + "Make correct choise: " + "\033[0m");
+            case 1 -> enryptData();
+            case 2 -> decriptData();
+            case 3 -> bruteForce();
+            default -> System.out.println("\033[0;31m" + "Make correct choise: " + "\033[0m");
         }
     }
 
@@ -57,7 +53,7 @@ public class ConsoleController {
         String encryptedText = cryptor.encript(originalText, secretKey);
         String fileName = Instant.now()
                 .truncatedTo(ChronoUnit.MILLIS)
-                .toString().replaceAll("[TZ]", " ") + "- encrypted";
+                .toString().replaceAll("[TZ]", " ") + "- encrypted file: " + path;
         dataDao.writeData(fileName, encryptedText);
         System.out.println("File was encrypted and save!");
         programEnd = true;
@@ -73,6 +69,28 @@ public class ConsoleController {
         dataDao.writeData(fileName, encryptedText);
         System.out.println("File was decrypted and saved!");
         programEnd = true;
+    }
+    private void bruteForce() {
+        String path = getPathToFile();
+        int maxOfKeys = getMaxOfSecretKey();
+        String originalText = dataDao.getData(path);
+        StringBuilder finalText = new StringBuilder();
+        for (int i = 1; i <= maxOfKeys; i++) {
+            String encryptedText = cryptor.decript(originalText, i);
+            finalText.append("Decripted with key = ").append(i).append("\n")
+                    .append(encryptedText).append("\n").append("\n");
+        }
+        String fileName = "Brute force - " + Instant.now().truncatedTo(ChronoUnit.MILLIS)
+                .toString().replaceAll("[TZ]", " ") + "- decrypted" ;
+        dataDao.writeData(fileName, finalText.toString());
+        System.out.println("File was decrypted and saved!");
+        programEnd = true;
+    }
+    private int getMaxOfSecretKey() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Set the maximum number of keys: ");
+        return scan.nextInt();
+
     }
     private int getSecretKey() {
         Scanner scan = new Scanner(System.in);
@@ -99,6 +117,7 @@ public class ConsoleController {
         System.out.println("\033[0;32m" + "Make your choice: " + "\033[0m");
         System.out.println("1: Encript file");
         System.out.println("2: Dencript file");
+        System.out.println("3: Dencript file with brute force");
         System.out.println();
         System.out.println("\033[0;36m" + "0: Exit" + "\033[0m");
     }
